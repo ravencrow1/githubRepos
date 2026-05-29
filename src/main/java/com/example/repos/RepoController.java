@@ -1,11 +1,15 @@
 package com.example.repos;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,8 +18,16 @@ public class RepoController {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @GetMapping("/{username}")
-    public List<Repo> getRepos(@PathVariable String username) {
-        List<RepoWithUrl> repoWithUrlList = getUserRepos(username);
+    public ResponseEntity<?> getRepos(@PathVariable String username) {
+        List<RepoWithUrl> repoWithUrlList;
+        try {
+            repoWithUrlList = getUserRepos(username);
+        } catch (HttpClientErrorException.NotFound e) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("status", 404);
+            error.put("message", "User not found: " + username);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+        }
         ArrayList<Repo> result = new ArrayList<>();
         for (RepoWithUrl repo : repoWithUrlList) {
             String repoName = repo.getRepoName();
@@ -23,7 +35,7 @@ public class RepoController {
             List<Branch> branches = getUserBranch(repo.getBranchUrl());
             result.add(new Repo(repoName, ownerLogin, branches));
         }
-        return result;
+        return ResponseEntity.ok(result);
     }
 
     public List<RepoWithUrl> getUserRepos(String username) {
