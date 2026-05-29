@@ -27,7 +27,6 @@ class ReposApplicationTests {
 	void returns404ForInvalidUser() throws Exception {
 		var response = restTemplate.getForEntity("http://localhost:" + port + "/userthatdoesnotexist", String.class);
 
-//		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		assertThat(response.getBody()).contains("User not found");
 	}
 }
