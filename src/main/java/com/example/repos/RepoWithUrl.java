@@ -1,19 +1,17 @@
 package com.example.repos;
 
-import java.util.List;
-
-public class Repo {
+public class RepoWithUrl {
     private String repoName;
     private String ownerLogin;
-    private List<Branch> branches;
+    private String branchUrl;
 
-    public Repo(String repoName, String ownerLogin, List<Branch> branches) {
+    public RepoWithUrl(String repoName, String ownerLogin, String branchUrl) {
         this.repoName = repoName;
         this.ownerLogin = ownerLogin;
-        this.branches = branches;
+        this.branchUrl = branchUrl;
     }
 
     public String getRepoName() {return repoName;}
     public String getOwnerLogin() {return ownerLogin;}
-    public List<Branch> getBranches() {return branches;}
+    public String getBranchUrl() {return branchUrl;}
 }
