@@ -26,7 +26,7 @@ public class RepoController {
             Map<String, Object> error = new HashMap<>();
             error.put("status", 404);
             error.put("message", "User not found: " + username);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+            return ResponseEntity.status(HttpStatus.OK).body(error);
         }
         ArrayList<Repo> result = new ArrayList<>();
         for (RepoWithUrl repo : repoWithUrlList) {
